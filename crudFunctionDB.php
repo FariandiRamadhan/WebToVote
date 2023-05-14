@@ -11,7 +11,7 @@ function AddData($data){
     // if(mysqli_affected_rows(1)) echo "<script>alert('ok');</script>";
 
 }
-function form($data){
+function Form($data){
     // $NAMA = $data["name"];
     $FILES = $data["gambar"];
     $FILES_NAME = $FILES["name"];
