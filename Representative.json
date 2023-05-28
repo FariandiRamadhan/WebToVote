@@ -40,7 +40,7 @@
         "pwd" : "Destroyer"
     },
     {
-        "nama" : "Dimas",
+        "nama" : "Dimas Adhitya",
         "nim" : "220444180009",
         "pwd" : "Anjay Mabar"
     },
@@ -67,7 +67,7 @@
     {
         "nama" : "Mudghea Azzahra Kundasuni",
         "nim" : "220444180014",
-        "pwd" : "xxxtentaction"
+        "pwd" : "Ghea aja"
     },
     {
         "nama" : "Muhamad Alshya Awaludin",
@@ -128,5 +128,11 @@
         "nama" : "Muhammad Alif Satria",
         "nim" : "220444180026",
         "pwd" : "Alif Seblak"
+    },
+    {
+        "nama" : "Dimas Adhitya",
+        "nim" : "220444180027",
+        "pwd" : "kk"
     }
+
 ]
