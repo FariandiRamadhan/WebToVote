@@ -1,43 +1,49 @@
 <?php
-$CONN = mysqli_connect("localhost","root","","votetable");
+    $CONN = mysqli_connect("localhost","root","","votetable");
+
 function Query($queryContent){
     global $CONN;
     mysqli_query($CONN, $queryContent);
     // var_dump($querycontent);
     // $ROWS = [];
     if(mysqli_affected_rows($CONN) && !mysqli_error($CONN)){
-        echo "success";
+        // echo "QUERY SUCCESS";
         return mysqli_query($CONN, $queryContent);
  
     }else{
-        echo "gagal";
+        echo "QUERY GAGAL";
     }
 }
 
 function Form($data){
     $ALLDATA = ParsingJSON();
     $SENDQUERY = [];
-    // print_r($DBNIM);
+
         switch ($data['submit']) {
             case 'login':
                 $NIM = htmlSpecialChars($data["nim"]);
                 $NAMA = htmlSpecialChars($data["nama"]);
                 $PWD = htmlSpecialChars($data["pwd"]);
                 // print_r($ALLDATA);
-    
-            foreach($ALLDATA as $key) {
-            // echo $ALLDATA[$index]["nama"];
-            // var_dump($key);
-                if($NAMA == $key["nama"]){
-                    echo "nama ok";
-                    $SENDQUERY[1] = $NAMA;
-                    if ($NIM == $key["nim"]) {
-                        echo "nim ok";
+                $NIMDB = Show("SELECT nim FROM votes");
+                $PWDDB = Show("SELECT pwd FROM votes");
+                if (in_array($NIM,$NIMDB) && in_array(md5($PWD),$PWDDB)) {
+                    $_POST["nim"] = $NIM;
+                    header("location: index.php");
+                    break;
+                }else{
+                foreach($ALLDATA as $key) {
+                    // echo $ALLDATA[$index]["nama"];
+                    // var_dump($key);
+                    if($NAMA == $key["nama"]){
+                            echo "nama ok";
+                        $SENDQUERY[1] = $NAMA;
+                        if ($NIM == $key["nim"]) {
+                            echo "nim ok";
                         $SENDQUERY[0] = $NIM;
                         if ($PWD == $key["pwd"]) {
                             echo "pwd ok";
-                            $SENDQUERY[2] = $PWD;
-                            
+                        $SENDQUERY[2] = $PWD;    
                         }else{
                             echo "password not!";
                             break;
@@ -48,11 +54,8 @@ function Form($data){
                 }else{
                     echo "nama not!";
                 }
-                // if (Query("SELECT nim FROM votes")) {
-                //     # code...
-                // }
             }
-    
+            }
                 if (!$SENDQUERY[1]) {
                     echo '<h3>NAMA TIDAK TERDAFTAR<h3>';
                     die;
@@ -69,34 +72,27 @@ function Form($data){
                 AddData($SENDQUERY);
                 header("location:index.php");
             }
-            // else if($SENDQUERY[0] == NULL){
-            //     echo "DATA KOSONG";
-            //     // header("location:login.php");
-            // }
                 break;
             
             case '1' || '2' || '3':
                 
                 $VOTE = intval($data['submit']);
-                $NIM = $data[0]["nim"];
+                $NIM = $data[0]["nim"]; // [0] = Array_push in Index.php [submit],[0]
                 if(!is_nan($VOTE)){
                 $VOTECOMMAND = "UPDATE votes SET vote = $VOTE WHERE nim = '$NIM'";
-                echo 'ok';
+                echo 'pass vote command';
                 if($VOTE > 0){
                     echo $VOTECOMMAND;
                     Query($VOTECOMMAND);
-                    echo "ko";
+                    echo "more than one";
                 }else{
-                    echo 'k';
-                // return false;
+                    echo 'gagal mengupdate';
                 }
             }
                 break;
             default:
-            // print_r("_SESSION");
-            // if ($_SESSION == NULL) {
+    
                 header("location:login.php");
-            // }
                 break;
         }
     // echo $NIM ." ".$NAMA." ".$PWD." ".$VOTE;
@@ -132,5 +128,35 @@ function ParsingJSON(){
     }
     // var_dump($DataName); // hasil var_dump = ["nama1","nama2","nama3"]
     return $AllData;
+}
+
+function CountVotes(){
+    $CALCULATED = [];
+    $VOTES = array(array());
+    $COUNT = 0;
+    $VOTESROW = Show("SELECT vote FROM votes WHERE vote != 0"); // [[],[]]
+    foreach ($VOTESROW as $KEY => $ARRAY1) { //key = 1,2,3 value = [0 => 1],[0 => 3]
+            // $VOTESROW[$KEY] = $ARRAY1[0]; // 3212   3,2,1,2
+            // echo "ok";
+            // print_r($ARRAY1);
+            if($ARRAY1[0] == "1")$VOTES[0][$COUNT] = intval($ARRAY1[0]);
+            if($ARRAY1[0] == "2")$VOTES[1][$COUNT] = intval($ARRAY1[0]);
+            if($ARRAY1[0] == "3")$VOTES[2][$COUNT] = intval($ARRAY1[0]);
+            $COUNT++;
+    }
+    for ($index=0; $index < count($VOTES); $index++) {    
+        $CALCULATED[$index] = round((count($VOTES[$index])/count($VOTESROW)) * 100);
+    }
+    // echo count($VOTES[2]);
+    if(array_sum($CALCULATED)>100){
+        for ($index=0; $index < count($CALCULATED); $index++) { 
+            $CALCULATED[$index] = floor((count($VOTES[$index])/count($VOTESROW)) * 100);
+        }
+    }
+    // var_dump($CALCULATED);
+    // var_dump(count($VOTE1));
+    // var_dump(count($VOTE2));
+    // var_dump(count($VOTE3));
+    return $CALCULATED;
 }
 ?>

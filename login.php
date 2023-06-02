@@ -7,11 +7,10 @@
     <title>Login to Website</title>
 </head>
 <body>
-    <script src="function.js"></script>
 <?php
 require_once 'function.php';
 require_once 'crudFunctionDB.php';
-print_r(Show("SELECT nim FROM votes"));
+// print_r(Show("SELECT nim FROM votes"));
 session_start();
 
 
@@ -38,6 +37,7 @@ session_start();
 <?php
 // print_r($_SESSION);
 if (isset($_POST["submit"])) {
+    $_SESSION["stamp"] = time();
     $_SESSION["nim"] = $_POST["nim"];
         Form($_POST);
     }

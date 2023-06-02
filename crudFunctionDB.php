@@ -10,12 +10,10 @@ function AddData($data){
     function Show($showablecontent){
         global $CONN;
         $ROWS = [];
-        // $VoteCommand = "SELECT vote FROM votes";
-        // $AllVotes = mysqli_query($CONN, $showablecontent);
         $AllVotes = Query($showablecontent);
 
         if(mysqli_error($CONN)){
-        echo "gagal";
+        echo "Menampilkan pesan, gagal!";
         }
         else {
             // $ROWS = $RESULT;
@@ -26,4 +24,5 @@ function AddData($data){
 
         }   
     }
+
 ?>
