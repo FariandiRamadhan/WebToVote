@@ -37,9 +37,10 @@ session_start();
 <?php
 // print_r($_SESSION);
 if (isset($_POST["submit"])) {
+    Form($_POST);
     $_SESSION["stamp"] = time();
     $_SESSION["nim"] = $_POST["nim"];
-        Form($_POST);
+    $_SESSION["vote"] = 0;
     }
 
 ?>

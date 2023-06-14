@@ -1,23 +1,53 @@
 // let h2 = document.getElementsByTagName("h2")[0];
 // let voteButton  = document.getElementsByName('submit');
 let div = document.getElementById('votebody');
+
 function date(){
     const date = new Date();
     // return h2.innerText = date.toLocaleTimeString();
 }
 // setTimeout(() => {setInterval(date, 1000);console.log("hbd")}, 1000*20);
 // let voteButton = document.getElementsByName('submit');
-
 let intervalVote = setInterval(function(){
-                        let xhr = new XMLHttpRequest();
-                        xhr.onreadystatechange = function(){
-                        if(xhr.readyState == 4 && xhr.status == 200){
-                            div.innerHTML = xhr.responseText;
-                        }
-                    }
-                    xhr.open('POST', 'AJAXContainer.php',true);
-                    xhr.send();
-                },1000);
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function(){
+    if(xhr.readyState == 4 && xhr.status == 200){
+        div.innerHTML = xhr.responseText;
+    }
+}
+xhr.open('POST', 'AJAXContainer.php',true);
+xhr.send();
+},1000);
+
+// voteButton
+// for (let index = 0; index < voteButton.length; index++) {
+//  voteButton[index].addEventListener("click", ()=> {
+//     console.log(voteButton[index].value);
+//     ajaxVoteButton(index);
+    
+// });   
+    
+// }
+// function ajaxVoteButton(index){
+// let textToSend = "submit=" + voteButton[index].value;
+    
+//     let xhr = new XMLHttpRequest();
+//     xhr.onreadystatechange = function(){
+//         if(xhr.readyState == 4 && xhr.status == 200){
+//             // div.innerHTML = xhr.responseText;
+//             console.log(xhr.responseText);
+//         }
+//     }
+//     // xhr.open('POST', 'AJAXContainer.php',true);
+//     // // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//     // xhr.send();
+//     xhr.open('POST', 'AJAXContainer.php',true);
+//     xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//     xhr.send(textToSend);
+// }
+
+
+
 // console.log(form.style.display);
 // if(form.style.display == 'none'){
 //     clearInterval(intervalVote);

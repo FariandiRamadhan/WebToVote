@@ -20,20 +20,22 @@
     array_push($_POST,$_SESSION);
     $timeCheck = time() - $_SESSION["stamp"];
     // var_dump(time() - $_SESSION["stamp"]);
+    // var_dump($_POST);
     if(!$_SESSION) header("location: login.php");
-    if (isset($_POST["submit"]) || $timeCheck >= 200) {
+    if (isset($_POST["submit"])) {
+        if ($_SESSION["vote"] == $_POST["submit"]) {
+            echo "<script>alert('pilihan anda sama');</script>";
+        }else{
+            $_SESSION["vote"] = $_POST["submit"];
+            echo "<script>confirm('pilihan anda beda');</script>";
+            Form($_POST);
+        }
         // || $timeCheck >= 200
-        Form($_POST);
         // session_unset();
         // session_destroy();
         // var_dump($_SESSION);
     }
 
-    // $queryFunction = Query($valuesToShow);
-    // if($queryFunction) Show($queryFunction);
-    // // var_dump($_FILES);
-    // var_dump(countVoteValues"());
-    // ParsingJSON();
     ?>
     <!-- <div class = "image">
     

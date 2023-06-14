@@ -4,14 +4,20 @@
 function Query($queryContent){
     global $CONN;
     mysqli_query($CONN, $queryContent);
-    // var_dump($querycontent);
-    // $ROWS = [];
-    if(mysqli_affected_rows($CONN) && !mysqli_error($CONN)){
-        // echo "QUERY SUCCESS";
-        return mysqli_query($CONN, $queryContent);
- 
-    }else{
-        echo "QUERY GAGAL";
+    $WHITELIST = ["INSERT","UPDATE", "WHERE", "VALUES", "FROM"];
+    $ARR_QUERY_CONTENT = explode(" ", $queryContent);
+    for ($index=0; $index < count($WHITELIST); $index++) { 
+        if(in_array($WHITELIST[$index], $ARR_QUERY_CONTENT)){
+            if(mysqli_affected_rows($CONN) && !mysqli_error($CONN)){
+                return mysqli_query($CONN, $queryContent);
+         
+            }else{
+                echo "QUERY GAGAL";
+            }
+        }else if($index == count($WHITELIST)-1 && !in_array($WHITELIST[$index], $ARR_QUERY_CONTENT)){
+            echo "INVALID SQL COMMAND";
+        }
+    
     }
 }
 
@@ -80,7 +86,6 @@ function Form($data){
                 $NIM = $data[0]["nim"]; // [0] = Array_push in Index.php [submit],[0]
                 if(!is_nan($VOTE)){
                 $VOTECOMMAND = "UPDATE votes SET vote = $VOTE WHERE nim = '$NIM'";
-                echo 'pass vote command';
                 if($VOTE > 0){
                     echo $VOTECOMMAND;
                     Query($VOTECOMMAND);
